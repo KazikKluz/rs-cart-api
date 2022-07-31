@@ -6,12 +6,13 @@
 *.md
 !README*.md
 README-secret.md
-
+#ignore other irrelevant files and folders
 */temp*
 */*/temp*
 temp?
-test
 .prettierrc
 .gitignore
+#ignore node modules, test and build folders
 node_modules
 dist
+test
