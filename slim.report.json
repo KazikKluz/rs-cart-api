@@ -21,7 +21,7 @@
   },
   "source_image": {
     "identity": {
-      "id": "sha256:43637f282af788a2cc8c803bc8c1f001cd45d25a150a94887158401045d47d63",
+      "id": "sha256:fb88a4150be180f6c8f947c729060fb7e43b22fec9cfa57957de59047a6fe89b",
       "tags": [
         "latest"
       ],
@@ -29,9 +29,9 @@
         "cart-api:latest"
       ]
     },
-    "size": 218033112,
-    "size_human": "218 MB",
-    "create_time": "2022-07-31T18:16:08Z",
+    "size": 186123859,
+    "size_human": "186 MB",
+    "create_time": "2022-07-31T21:00:45Z",
     "docker_version": "20.10.17",
     "architecture": "amd64",
     "user": "node",
@@ -43,6 +43,7 @@
       "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
       "NODE_VERSION=18.7.0",
       "YARN_VERSION=1.22.19",
+      "NODE_ENV=production",
       "PORT=8080"
     ],
     "container_entry": {
@@ -53,8 +54,8 @@
   "minified_image_size_human": "96 MB",
   "minified_image": "cart-api.slim",
   "minified_image_has_data": true,
-  "minified_by": 2.2771078625940686,
-  "artifact_location": "/tmp/docker-slim-state/.docker-slim-state/images/43637f282af788a2cc8c803bc8c1f001cd45d25a150a94887158401045d47d63/artifacts",
+  "minified_by": 1.94385200879603,
+  "artifact_location": "/tmp/docker-slim-state/.docker-slim-state/images/fb88a4150be180f6c8f947c729060fb7e43b22fec9cfa57957de59047a6fe89b/artifacts",
   "container_report_name": "creport.json",
   "seccomp_profile_name": "cart-api-seccomp.json",
   "apparmor_profile_name": "cart-api-apparmor-profile",
@@ -233,24 +234,36 @@
     },
     {
       "is_top_image": true,
-      "id": "sha256:43637f282af788a2cc8c803bc8c1f001cd45d25a150a94887158401045d47d63",
+      "id": "sha256:fb88a4150be180f6c8f947c729060fb7e43b22fec9cfa57957de59047a6fe89b",
       "full_name": "cart-api:latest",
       "repo_name": "cart-api",
       "version_tag": "latest",
       "raw_tags": [
         "cart-api:latest"
       ],
-      "create_time": "2022-07-31T18:16:08Z",
-      "new_size": 51831666,
-      "new_size_human": "52 MB",
+      "create_time": "2022-07-31T21:00:45Z",
+      "new_size": 19922413,
+      "new_size_human": "20 MB",
       "base_image_id": "sha256:16b18c06553724cd05d9c996e0c5d4b831704412352dadb3d1b3310f82d593ba",
       "instructions": [
         {
-          "type": "COPY",
-          "time": "2022-07-31T18:15:41Z",
+          "type": "ENV",
+          "time": "2022-07-31T21:00:30Z",
           "is_nop": true,
           "local_image_exists": true,
-          "intermediate_image_id": "sha256:2d48e59746085395ccf6ace485ca2c58630ad2f3cdd9b825f996c1759e59636a",
+          "intermediate_image_id": "sha256:133fd4d04c81b72e17c6151d34e098a34de574bee292d9e4e01a5d4ce2a353c5",
+          "layer_index": 0,
+          "size": 0,
+          "params": "NODE_ENV=production",
+          "command_snippet": "ENV NODE_ENV=production",
+          "command_all": "ENV NODE_ENV=production"
+        },
+        {
+          "type": "COPY",
+          "time": "2022-07-31T21:00:32Z",
+          "is_nop": true,
+          "local_image_exists": true,
+          "intermediate_image_id": "sha256:f01426c01c871f7d225039030139919af59618bd2828f59321b817cfff655f68",
           "layer_index": 0,
           "size": 1015671,
           "size_human": "1.0 MB",
@@ -262,40 +275,25 @@
         },
         {
           "type": "RUN",
-          "time": "2022-07-31T18:15:52Z",
+          "time": "2022-07-31T21:00:41Z",
           "is_nop": false,
           "local_image_exists": true,
-          "intermediate_image_id": "sha256:72b5c818b19376cb3fef508ff9475cb9cec7bee4845875d7f0414cebb8ce2990",
+          "intermediate_image_id": "sha256:e2cb48631780b76f72db138ef4d47e5a9b2830bf0e6387b66bd68807c16ea619",
           "layer_index": 0,
-          "size": 19567496,
-          "size_human": "20 MB",
-          "command_snippet": "RUN npm install --only=production",
-          "command_all": "RUN npm install --only=production",
+          "size": 18553967,
+          "size_human": "19 MB",
+          "command_snippet": "RUN npm ci --only=production",
+          "command_all": "RUN npm ci --only=production",
           "system_commands": [
-            "npm install --only=production"
-          ]
-        },
-        {
-          "type": "RUN",
-          "time": "2022-07-31T18:16:04Z",
-          "is_nop": false,
-          "local_image_exists": true,
-          "intermediate_image_id": "sha256:13a525238eac928667eac71f833e20b53b6203acb00c43862ec2194192bc8d01",
-          "layer_index": 0,
-          "size": 30895724,
-          "size_human": "31 MB",
-          "command_snippet": "RUN npm install pm2 -g",
-          "command_all": "RUN npm install pm2 -g",
-          "system_commands": [
-            "npm install pm2 -g"
+            "npm ci --only=production"
           ]
         },
         {
           "type": "COPY",
-          "time": "2022-07-31T18:16:05Z",
+          "time": "2022-07-31T21:00:42Z",
           "is_nop": true,
           "local_image_exists": true,
-          "intermediate_image_id": "sha256:4dbd653be54f47701af1b8d340b48fa5abecd83b954dae869bbd3c8ff173562b",
+          "intermediate_image_id": "sha256:e705f01b67db5fe4a49b2ef5789b899e81b7ce160d102b879af097387d26824d",
           "layer_index": 0,
           "size": 352775,
           "size_human": "353 kB",
@@ -307,10 +305,10 @@
         },
         {
           "type": "USER",
-          "time": "2022-07-31T18:16:05Z",
+          "time": "2022-07-31T21:00:42Z",
           "is_nop": true,
           "local_image_exists": true,
-          "intermediate_image_id": "sha256:6c0740d136a316a86e27be4be9cec6a95563a2117183c4d0c276e6e5244f9f69",
+          "intermediate_image_id": "sha256:11617c219839b355f45b3296c34fd2e964b9df631ff3d6b68ba8f11101fa1a08",
           "layer_index": 0,
           "size": 0,
           "params": "node",
@@ -319,10 +317,10 @@
         },
         {
           "type": "ENV",
-          "time": "2022-07-31T18:16:06Z",
+          "time": "2022-07-31T21:00:43Z",
           "is_nop": true,
           "local_image_exists": true,
-          "intermediate_image_id": "sha256:6bafa65ddd04ad5082ce516f1dd4d257a0c5f482ad018e56e2124fa2fd025164",
+          "intermediate_image_id": "sha256:5de37a7f79828dfba2029c6a9a47d5de1d323234508b8a011db12b67657c3f7d",
           "layer_index": 0,
           "size": 0,
           "params": "PORT=8080",
@@ -331,10 +329,10 @@
         },
         {
           "type": "EXPOSE",
-          "time": "2022-07-31T18:16:07Z",
+          "time": "2022-07-31T21:00:44Z",
           "is_nop": true,
           "local_image_exists": true,
-          "intermediate_image_id": "sha256:2fe83ec49edaa85343ae76a2e9cd3b92cbebcb96aa5cbc764df030ab8f859ff8",
+          "intermediate_image_id": "sha256:eff55388b7c9db88f71595efce054e906f4be482095ef4050611ed51fbd50122",
           "layer_index": 0,
           "size": 0,
           "params": "8080",
@@ -343,7 +341,7 @@
         },
         {
           "type": "CMD",
-          "time": "2022-07-31T18:16:08Z",
+          "time": "2022-07-31T21:00:45Z",
           "is_last_instruction": true,
           "is_nop": true,
           "is_exec_form": true,
