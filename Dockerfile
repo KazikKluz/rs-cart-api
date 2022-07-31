@@ -12,6 +12,9 @@ RUN npm run build
 
 #application
 FROM node:alpine as application
+
+ENV NODE_ENV=production
+
 #copy all bundled code from base to application
 COPY --from=base /app/package*.json ./
 #do clean install without dev dependencies
