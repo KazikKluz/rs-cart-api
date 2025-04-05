@@ -1,39 +1,59 @@
-import { Injectable } from '@nestjs/common';
-import { v4 } from 'uuid';
-
-import { Order } from '../models';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Order } from '../../entities/order.entity';
+import { CreateOrderPayload } from '../type';
 
 @Injectable()
 export class OrderService {
-  private orders: Record<string, Order> = {}
+  constructor(
+    @InjectRepository(Order)
+    private orderRepository: Repository<Order>,
+  ) {}
 
-  findById(orderId: string): Order {
-    return this.orders[ orderId ];
+  async getAll(): Promise<Order[]> {
+    return await this.orderRepository.find();
   }
 
-  create(data: any) {
-    const id = v4(v4())
-    const order = {
-      ...data,
-      id,
-      status: 'inProgress',
-    };
-
-    this.orders[ id ] = order;
+  async findById(orderId: string): Promise<Order> {
+    const order = await this.orderRepository.findOne({
+      where: { id: orderId },
+      relations: ['items', 'items.product'],
+    });
 
     return order;
   }
 
-  update(orderId, data) {
-    const order = this.findById(orderId);
+  async create(data: CreateOrderPayload): Promise<Order> {
+    try {
+      const order = this.orderRepository.create({
+        userId: data.userId,
+        ...data,
+      });
+      const savedOrder = await this.orderRepository.save(order);
+
+      return savedOrder;
+    } catch (error) {
+      throw new BadRequestException('Failed to create order: ' + error.message);
+    }
+  }
+
+  async update(orderId: string, data: Partial<Order>): Promise<Order> {
+    const order = await this.findById(orderId);
 
     if (!order) {
-      throw new Error('Order does not exist.');
+      throw new NotFoundException('Order does not exist.');
     }
 
-    this.orders[ orderId ] = {
+    Object.assign(order, {
       ...data,
       id: orderId,
-    }
+    });
+
+    return await this.orderRepository.save(order);
   }
 }
