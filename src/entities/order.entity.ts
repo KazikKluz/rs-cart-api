@@ -35,8 +35,8 @@ export class Order {
   @Column({ name: 'cart_id', type: 'uuid' })
   cart_id: string;
 
-  @Column('jsonb')
-  items: Array<{ productId: string; count: number }>;
+  // @Column('jsonb')
+  // items: Array<{ productId: string; count: number }>;
 
   @Column('jsonb')
   payment: PaymentData;

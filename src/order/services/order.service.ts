@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from '../../entities/order.entity';
-import { CreateOrderPayload } from '../type';
+import { CreateOrderPayload, StatusHistory } from '../type';
 
 @Injectable()
 export class OrderService {
@@ -56,4 +56,31 @@ export class OrderService {
 
     return await this.orderRepository.save(order);
   }
+
+  //   async getStatusHistory(orderId: string): Promise<StatusHistory[]> {
+  //     const order = await this.orderRepository.findOne({
+  //       where: { id: orderId },
+  //     });
+  //     if (!order) {
+  //       throw new NotFoundException(`Order with id ${orderId} not found`);
+  //     }
+
+  //     return this.statusHistoryRepository.find({
+  //       where: { orderId },
+  //       order: { timestamp: 'DESC' },
+  //     });
+  //   }
+  // }
+  // async getStatusHistory(orderId: string): Promise<StatusHistory[]> {
+  //   const order = await this.orderRepository.findOne({
+  //     where: { id: orderId },
+  //   });
+  //   if (!order) {
+  //     throw new NotFoundException(`Order with id ${orderId} not found`);
+  //   }
+
+  //   return this.statusHistoryRepository.find({
+  //     where: { orderId },
+  //     order: { timestamp: 'DESC' },
+  //   });
 }

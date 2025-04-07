@@ -7,7 +7,7 @@ export enum OrderStatus {
   Cancelled = 'CANCELLED',
 }
 
-type StatusHistory = Array<{
+export type StatusHistory = Array<{
   status: OrderStatus;
   timestamp: number;
   comment: string;
