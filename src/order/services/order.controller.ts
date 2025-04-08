@@ -34,26 +34,26 @@ export class OrderController {
     return await this.orderService.findById(id);
   }
 
-  //   @Get(':id/history')
-  //   async getOrderHistory(@Param('id') id: string) {
-  //     return await this.orderService.getStatusHistory(id);
-  //   }
+  @Get(':id/history')
+  async getOrderHistory(@Param('id') id: string) {
+    return await this.orderService.getStatusHistory(id);
+  }
 
-  //   @Delete(':id')
-  //   @HttpCode(HttpStatus.NO_CONTENT)
-  //   async deleteOrder(@Param('id') id: string) {
-  //     await this.orderService.deleteOrder(id);
-  //   }
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteOrder(@Param('id') id: string) {
+    await this.orderService.deleteOrder(id);
+  }
 
-  //   @Put(':id/status')
-  //   async updateStatus(
-  //     @Param('id') id: string,
-  //     @Body() body: { status: OrderStatus; comment?: string },
-  //   ) {
-  //     return await this.orderService.updateStatus(
-  //       id,
-  //       body.status,
-  //       body.comment || '',
-  //     );
-  //   }
+  @Put(':id/status')
+  async updateStatus(
+    @Param('id') id: string,
+    @Body() body: { status: OrderStatus; comment?: string },
+  ) {
+    return await this.orderService.updateStatus(
+      id,
+      body.status,
+      body.comment || '',
+    );
+  }
 }
