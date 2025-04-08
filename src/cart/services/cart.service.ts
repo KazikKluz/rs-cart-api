@@ -24,6 +24,13 @@ export class CartService {
 
   async findByUserId(user_id: string): Promise<Cart> {
     return this.cartRepository.findOne({
+      where: { user_id, status: CartStatuses.OPEN },
+      relations: ['items'],
+    });
+  }
+
+  async findByUserIdToDelete(user_id: string): Promise<Cart[]> {
+    return this.cartRepository.find({
       where: { user_id },
       relations: ['items'],
     });
@@ -87,10 +94,12 @@ export class CartService {
   }
 
   async removeByUserId(userId: string): Promise<void> {
-    const userCart = await this.findByUserId(userId);
+    const userCart = await this.findByUserIdToDelete(userId);
 
-    if (userCart) {
-      await this.cartRepository.delete(userCart.id);
+    if (userCart.length > 0) {
+      for (const cart of userCart) {
+        await this.cartItemRepository.delete({ cart: { id: cart.id } });
+      }
     }
   }
 }
