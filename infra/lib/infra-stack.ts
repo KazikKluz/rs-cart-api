@@ -16,8 +16,8 @@ export class LambdaStack extends cdk.Stack {
 
     const cartLambda = new NodejsFunction(this, `${ID}-lambda`, {
       runtime: Runtime.NODEJS_20_X,
-      handler: 'lambda.handler',
-      entry: path.join(__dirname, '../../dist/lambda.js'),
+      handler: 'index.handler',
+      entry: path.join(__dirname, '../../dist/index.js'),
       depsLockFilePath: path.join(__dirname, '../../package-lock.json'),
       bundling: {
         forceDockerBundling: true,
@@ -46,49 +46,22 @@ export class LambdaStack extends cdk.Stack {
     const myGateway = new gateway.RestApi(this, 'Cart', {
       restApiName: 'Cart Service',
       defaultCorsPreflightOptions: {
-        allowOrigins: ['https://d1rd20mvfwcq69.cloudfront.net'],
-        allowMethods: gateway.Cors.ALL_METHODS,
+        allowOrigins: ['*'],
+        allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowHeaders: [
           'X-Amz-Date',
           'Authorization',
           'X-Api-Key',
           'X-Amz-Security-Token',
           'Content-Type',
+          'Accept',
         ],
         allowCredentials: true,
       },
     });
 
-    const cartIntegration = new gateway.LambdaIntegration(cartLambda);
-
-    myGateway.root.addMethod('GET', cartIntegration);
-
-    const resource = myGateway.root.addResource('api');
-    const authResource = resource.addResource('auth');
-    const loginResource = authResource.addResource('login');
-    loginResource.addMethod('POST', cartIntegration);
-    const registerResource = authResource.addResource('register');
-    registerResource.addMethod('POST', cartIntegration);
-    const profileResource = resource.addResource('profile');
-    profileResource.addMethod('GET', cartIntegration);
-    const cartResource = profileResource.addResource('cart');
-    cartResource.addMethod('GET', cartIntegration);
-    cartResource.addMethod('PUT', cartIntegration);
-    cartResource.addMethod('DELETE', cartIntegration);
-    const orderResource = cartResource.addResource('order');
-    orderResource.addMethod('PUT', cartIntegration);
-    orderResource.addMethod('GET', cartIntegration);
-    const ordersResource = resource.addResource('orders');
-
-    ordersResource.addMethod('GET', cartIntegration);
-    ordersResource.addMethod('POST', cartIntegration);
-
-    const orderIdResource = ordersResource.addResource('{id}');
-    orderIdResource.addMethod('GET', cartIntegration);
-    const historyResource = orderIdResource.addResource('history');
-    historyResource.addMethod('GET', cartIntegration);
-    const orderStatusResource = orderIdResource.addResource('status');
-    orderStatusResource.addMethod('PUT', cartIntegration);
+    const proxyResource = myGateway.root.addResource('{proxy+}');
+    proxyResource.addMethod('ANY', new gateway.LambdaIntegration(cartLambda));
 
     new cdk.CfnOutput(this, `${ID}-lambda-output`, {
       value: cartLambda.addFunctionUrl({
