@@ -25,35 +25,48 @@ export class OrderController {
   }
 
   @Get()
-  async getAll() {
-    return await this.orderService.getAll();
+  async getAllOrders() {
+    const orders = await this.orderService.findAll();
+    return orders.map((order) => ({
+      id: order.id,
+      user_id: order.user_id,
+      cart_id: order.cart_id,
+      email: order.user.email, // Email from user relation
+      payment: order.payment,
+      delivery: order.delivery,
+      comments: order.comments,
+      status: order.status,
+      total: order.total,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
+    }));
   }
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    return await this.orderService.findById(id);
+    return await this.orderService.findOneById(id);
   }
 
-  @Get(':id/history')
-  async getOrderHistory(@Param('id') id: string) {
-    return await this.orderService.getStatusHistory(id);
-  }
+  //   @Get(':id/history')
+  //   async getOrderHistory(@Param('id') id: string) {
+  //     return await this.orderService.getStatusHistory(id);
+  //   }
 
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteOrder(@Param('id') id: string) {
-    await this.orderService.deleteOrder(id);
-  }
+  //   @Delete(':id')
+  //   @HttpCode(HttpStatus.NO_CONTENT)
+  //   async deleteOrder(@Param('id') id: string) {
+  //     await this.orderService.deleteOrder(id);
+  //   }
 
-  @Put(':id/status')
-  async updateStatus(
-    @Param('id') id: string,
-    @Body() body: { status: OrderStatus; comment?: string },
-  ) {
-    return await this.orderService.updateStatus(
-      id,
-      body.status,
-      body.comment || '',
-    );
-  }
+  //   @Put(':id/status')
+  //   async updateStatus(
+  //     @Param('id') id: string,
+  //     @Body() body: { status: OrderStatus; comment?: string },
+  //   ) {
+  //     return await this.orderService.updateStatus(
+  //       id,
+  //       body.status,
+  //       body.comment || '',
+  //     );
+  //   }
 }

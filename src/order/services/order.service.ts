@@ -15,6 +15,30 @@ export class OrderService {
     private orderRepository: Repository<Order>,
   ) {}
 
+  async findAll(): Promise<Order[]> {
+    return this.orderRepository.find({
+      relations: ['user'], // Fetch user relation for email
+    });
+  }
+
+  async findAllByUserId(userId: string): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user'], // Fetch user relation to get email
+    });
+  }
+
+  async findOneById(orderId: string): Promise<Order> {
+    const order = await this.orderRepository.findOne({
+      where: { id: orderId },
+      relations: ['user'],
+    });
+    if (!order) {
+      throw new BadRequestException('Order not found');
+    }
+    return order;
+  }
+
   async getAll(): Promise<Order[]> {
     return await this.orderRepository.find();
   }

@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Cart } from './cart.entity';
 import { OrderStatus } from 'src/order/type';
+import { User } from './user.entity';
 
 export interface PaymentData {
   method: string;
@@ -79,4 +80,8 @@ export class Order {
   @ManyToOne(() => Cart, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'cart_id' })
   cart: Cart;
+
+  @ManyToOne(() => User, (user) => user.orders)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }
