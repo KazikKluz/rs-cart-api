@@ -1,27 +1,37 @@
-# ARG ALPINE_VERSION=3.21
-
-# FROM node:23.5-alpine${ALPINE_VERSION} AS builder
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS base
 
 WORKDIR /app
 
-COPY package*.json package.init.cjs tsconfig.json tsconfig.build.json .cleanmodules ./
-COPY src ./src
-
-RUN node package.init.cjs && npm ci && npm run build && npm ci --omit=dev \
-  && npx clean-modules --directory /app/node_modules --glob-file /app/.cleanmodules --yes --no-defaults
-
-
-# FROM node:23.5-alpine${ALPINE_VERSION}
-FROM node:18-alpine
-WORKDIR /app
-
+# Copy and install only package files first — changes rarely
 COPY package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
 
-ENV NODE_ENV=production \
-  APP_PORT=4000
+# Install all dependencies (cacheable if package.json doesn't change)
+RUN npm ci
+
+# Copy source code — changes frequently
+COPY . .
+
+# Build app (after source code)
+RUN npm run build
+
+# Remove dev dependencies for production
+RUN npm prune --omit=dev
+
+
+# Production stage
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+# Only need package.json for runtime metadata (not strictly needed)
+COPY package*.json ./
+
+# Copy final production app & modules from builder
+COPY --from=base /app/dist ./dist
+COPY --from=base /app/node_modules ./node_modules
 
 EXPOSE 4000
+
 CMD ["node", "dist/main"]
